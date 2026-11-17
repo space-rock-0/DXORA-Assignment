@@ -67,8 +67,13 @@ Service entries quote the page's own copy in their `evidence` field; competitors
 - `GET /health` shows which providers are configured without exposing keys: `{"status":"ok","configured_providers":["groq"]}`.
 - `POST /link-analysis` ran end-to-end in ~4.8s and returned the validated response above.
 - Reported LLM output passed `Analysis`'s Pydantic validation with no retries or fallbacks.
-- Demo UI screenshot of the five-section report: [`docs/demo-report.jpg`](docs/demo-report.jpg).
-- A 90-second animated walkthrough of the app (opening → paste URL → five answers → `POST /link-analysis`) is included in this workspace at `videos/website-intelligence-demo/renders/video.mp4` (not committed to keep the repo lean).
+- Demo UI screenshot of the five-section report:
+
+![Five-section Website Intelligence report](docs/demo-report.jpg)
+
+- A 90-second animated walkthrough of the app (opening → paste URL → five answers → `POST /link-analysis`): [`docs/demo.mp4`](docs/demo.mp4)
+
+<video src="docs/demo.mp4" controls width="960"></video>
 
 ## Providers and fallback
 
