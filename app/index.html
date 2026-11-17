@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Website Intelligence — Free AI Website & SEO Audit Tool</title>
+<meta name="description" content="Analyze any public URL with AI: competitor comparison, top search queries, SEO improvements, services and target audience in one clear, actionable report.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="http://localhost:4000/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Website Intelligence — Free AI Website & SEO Audit Tool">
+<meta property="og:description" content="One public URL, five AI-powered perspectives: competitors, search queries, SEO, services and target audience.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Website Intelligence — Free AI Website & SEO Audit Tool">
+<meta name="twitter:description" content="One public URL, five AI-powered perspectives: competitors, search queries, SEO, services and target audience.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"WebApplication","name":"Website Intelligence","applicationCategory":"BusinessApplication","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"AI-powered website analysis: competitor comparison, SEO improvements, search queries, services and target audience identification."}
+</script>
+<style>body{margin:0;background:#101b20;color:#edf4ee;font:17px system-ui}main{max-width:1000px;margin:70px auto;padding:24px}small{color:#a8d09e;letter-spacing:3px}h1{font-size:clamp(40px,7vw,76px);max-width:800px;line-height:1.05}h2{font-size:1.4rem;margin-top:0}p{color:#b9c9ca}form{display:flex;gap:12px;margin:40px 0}input,button{padding:18px;border:1px solid #66817d;border-radius:8px;font:inherit}input{flex:1;min-width:0;background:#1b2b30;color:white}button{background:#c3ec9a;cursor:pointer}button:disabled{opacity:.5}section{border-top:1px solid #3b5254;padding:24px 0}pre{white-space:pre-wrap;overflow-wrap:anywhere;font:14px/1.7 monospace}a{color:#c3ec9a}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}.card{border:1px solid #3b5254;border-radius:8px;padding:20px}@media(max-width:600px){form{flex-direction:column}}</style>
+</head>
+<body>
+<main>
+<small>WEBSITE INTELLIGENCE / 01</small>
+<h1>Turn your website into your next opportunity.</h1>
+<p>Business insights. Audience discovery. Actionable SEO.<br>One public URL, five perspectives.</p>
+<form id="audit"><input id="url" type="url" required placeholder="https://your-website.com" aria-label="Website URL"><button>Analyze website →</button></form>
+<p id="status" role="status"></p>
+<div id="results"></div>
+
+<section aria-labelledby="what">
+<h2 id="what">What this tool does</h2>
+<p>Website Intelligence reads a public website URL, extracts its real content, and uses a large language model to produce a structured business report. Instead of generic advice, every recommendation is grounded in what the site actually says: its products, services, positioning and language. You get a single-page report that covers five perspectives on the same business, ready to share with founders, marketers or clients.</p>
+</section>
+
+<section aria-labelledby="five">
+<h2 id="five">The five perspectives</h2>
+<div class="grid">
+<div class="card"><h3>Competitor vs your brand</h3><p>Identifies your brand, category and services, then suggests at least three relevant competitors with strengths, weaknesses and positioning opportunities. Competitor suggestions are AI-generated and should be verified before use in strategy decks.</p></div>
+<div class="card"><h3>Top 5 search queries</h3><p>Five realistic queries potential customers would type on Google, Facebook, Instagram, LinkedIn and X, each tagged with search intent, platform fit and target audience — with no invented search volumes.</p></div>
+<div class="card"><h3>SEO improvements</h3><p>Primary, secondary and long-tail keyword recommendations, a rewritten SEO title, a human-friendly meta description and supporting content ideas such as landing pages, FAQs and blog topics.</p></div>
+<div class="card"><h3>Top 5 services</h3><p>The five most important services identified from the site's own copy, each with a short description, target industry, target customer and the main benefit it delivers. Inferred items are clearly labelled.</p></div>
+<div class="card"><h3>Target audience</h3><p>Primary and secondary audiences, industry segments, business types, customer profiles, geographic focus, customer needs and challenges, and recommended segments for marketing campaigns.</p></div>
+</div>
+</section>
+
+<section aria-labelledby="how">
+<h2 id="how">How it works</h2>
+<p>Paste any public URL into the form above. The service validates the address, blocks private or internal network targets (SSRF protection), fetches the HTML, strips navigation, scripts and boilerplate, and sends the cleaned text to the configured LLM with a strict JSON schema. The model's response is validated with Pydantic before it reaches you, so the output is always structured, predictable JSON rather than free-form prose. If a provider is unavailable, the service fails over to the next configured provider automatically.</p>
+<p>Analysis typically completes in under a minute. Results are shown on this page and are also available as raw JSON from the <code>POST /link-analysis</code> endpoint. Competitor recommendations are suggestions, not verified market research — always confirm them against primary sources before acting on them.</p>
+</section>
+
+<section aria-labelledby="who">
+<h2 id="who">Who it is for</h2>
+<p>Founders preparing a go-to-market plan, marketers building keyword and content strategies, agencies auditing a new prospect's site, and developers integrating website intelligence into their own workflows via the REST API. The interface requires no account; the API is documented at <a href="/docs">/docs</a>.</p>
+<p><a href="/docs">API documentation</a> · Single-page analysis · Competitor suggestions require verification</p>
+</section>
+</main>
+<script>const form=document.querySelector('form');form.onsubmit=async e=>{e.preventDefault();const button=form.querySelector('button'),status=document.querySelector('#status'),results=document.querySelector('#results');button.disabled=true;results.replaceChildren();status.textContent='Reading the website and generating insights… This may take a few minutes if providers fail over.';try{const r=await fetch('/link-analysis',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({url:document.querySelector('#url').value})});const data=await r.json();if(!r.ok)throw Error(typeof data.detail==='string'?data.detail:JSON.stringify(data.detail));status.textContent=`Analysis complete — ${data.llm.provider} / ${data.llm.model}`;for(const [name,value]of Object.entries({brand:data.brand,...data.analysis,technical_seo:data.technical_seo})){const section=document.createElement('section'),h=document.createElement('h2'),pre=document.createElement('pre');h.textContent=name.replaceAll('_',' ');pre.textContent=JSON.stringify(value,null,2);section.append(h,pre);results.append(section)}}catch(error){status.textContent=error.message}finally{button.disabled=false}};</script>
+</body>
+</html>
